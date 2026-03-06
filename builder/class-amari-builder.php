@@ -31,6 +31,10 @@ class AmariBuilder {
     }
 
     private function __construct() {
+        // Set instance early so element files can call AmariBuilder::instance()
+        // during load_elements() without triggering infinite recursion.
+        self::$instance = $this;
+
         $this->load_element_base();
         $this->load_elements();
         $this->register_hooks();
