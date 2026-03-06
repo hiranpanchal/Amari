@@ -786,6 +786,52 @@ class AmariBuilderController {
         });
     }
 
+    /* ── Publish ── */
+
+    publish() {
+        const btn = $('#amari-publish-btn');
+        if (btn) { btn.classList.add('publishing'); btn.textContent = '⏳ Publishing...'; }
+
+        fetch(AmariBuilderConfig.ajaxUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action:       'amari_publish_page',
+                nonce:        AmariBuilderConfig.nonce,
+                post_id:      this.postId,
+                builder_data: JSON.stringify(this.data),
+            })
+        })
+        .then(r => r.json())
+        .then(res => {
+            if (btn) {
+                btn.classList.remove('publishing');
+                btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Publish';
+            }
+            if (res.success) {
+                this.isDirty = false;
+                this._showStatus('✓ Published!', 'success');
+                // Offer to view the live page
+                if (res.data && res.data.permalink) {
+                    setTimeout(() => {
+                        if (confirm('Page published! View it now?')) {
+                            window.open(res.data.permalink, '_blank');
+                        }
+                    }, 500);
+                }
+            } else {
+                this._showStatus('✗ Publish failed: ' + (res.data?.message || 'Unknown error'), 'error');
+            }
+        })
+        .catch(() => {
+            if (btn) {
+                btn.classList.remove('publishing');
+                btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Publish';
+            }
+            this._showStatus('✗ Network error', 'error');
+        });
+    }
+
     /* ── Status ── */
 
     _showStatus(msg, type = '') {
@@ -906,8 +952,11 @@ class AmariBuilderController {
         // Close
         on($('#amari-builder-close'), 'click', () => this.close());
 
-        // Save
+        // Save draft
         on($('#amari-save-btn'), 'click', () => this.save());
+
+        // Publish
+        on($('#amari-publish-btn'), 'click', () => this.publish());
 
         // Keyboard shortcuts
         on(document, 'keydown', e => {

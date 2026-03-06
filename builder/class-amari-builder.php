@@ -68,7 +68,14 @@ class AmariBuilder {
             'tabs'           => 'class-element-tabs.php',
             'counter'        => 'class-element-counter.php',
             'slider'         => 'class-element-slider.php',
-            'pricing-table'  => 'class-element-pricing-table.php',
+            'pricing-table'    => 'class-element-pricing-table.php',
+            // V3: WooCommerce elements
+            'woo-product-grid' => 'class-element-woo-product-grid.php',
+            'woo-product-card' => 'class-element-woo-product-card.php',
+            'woo-cart-button'  => 'class-element-woo-cart-button.php',
+            'woo-price'        => 'class-element-woo-price.php',
+            'woo-add-to-cart'  => 'class-element-woo-add-to-cart.php',
+            'woo-sale-badge'   => 'class-element-woo-sale-badge.php',
         ];
 
         foreach ( $element_files as $type => $file ) {

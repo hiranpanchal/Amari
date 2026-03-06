@@ -147,12 +147,21 @@ require_once AMARI_BUILDER_DIR . '/class-amari-templates.php';
 require_once AMARI_BUILDER_DIR . '/class-amari-frontend-editor.php';
 require_once AMARI_DIR         . '/admin/class-amari-global-styles.php';
 
+// V3 systems
+require_once AMARI_DIR . '/admin/class-amari-nav-builder.php';
+require_once AMARI_DIR . '/admin/class-amari-customiser.php';
+require_once AMARI_DIR . '/admin/class-amari-mega-menu.php';
+
 // Initialize all systems
 add_action( 'init', function() {
     AmariBuilder::instance();
     AmariTemplates::instance();
     AmariFrontendEditor::instance();
     AmariGlobalStyles::instance();
+    // V3
+    AmariNavBuilder::instance();
+    AmariCustomiser::instance();
+    AmariMegaMenu::instance();
 });
 
 /* ============================================================
@@ -236,7 +245,51 @@ function amari_ajax_save_builder() {
 }
 
 /* ============================================================
-   8. AJAX — GET BUILDER DATA
+   8. AJAX — PUBLISH PAGE (save builder data + set post_status)
+   ============================================================ */
+
+add_action( 'wp_ajax_amari_publish_page', 'amari_ajax_publish_page' );
+function amari_ajax_publish_page() {
+    check_ajax_referer( 'amari_builder_nonce', 'nonce' );
+
+    $post_id = intval( $_POST['post_id'] ?? 0 );
+    if ( ! $post_id || ! current_user_can( 'publish_post', $post_id ) ) {
+        wp_send_json_error( [ 'message' => 'Permission denied.' ] );
+    }
+
+    // Save builder data
+    $data    = wp_unslash( $_POST['builder_data'] ?? '' );
+    $decoded = json_decode( $data, true );
+
+    if ( json_last_error() !== JSON_ERROR_NONE ) {
+        wp_send_json_error( [ 'message' => 'Invalid JSON data.' ] );
+    }
+
+    $clean = amari_sanitize_builder_data( $decoded );
+    update_post_meta( $post_id, '_amari_builder_data', wp_json_encode( $clean ) );
+    update_post_meta( $post_id, '_amari_builder_enabled', 1 );
+
+    // Publish the page
+    $content = amari_builder_to_text( $clean );
+    $result  = wp_update_post( [
+        'ID'           => $post_id,
+        'post_content' => $content,
+        'post_status'  => 'publish',
+    ], true );
+
+    if ( is_wp_error( $result ) ) {
+        wp_send_json_error( [ 'message' => $result->get_error_message() ] );
+    }
+
+    wp_send_json_success( [
+        'message'   => 'Published!',
+        'post_id'   => $post_id,
+        'permalink' => get_permalink( $post_id ),
+    ] );
+}
+
+/* ============================================================
+   9. AJAX — GET BUILDER DATA
    ============================================================ */
 
 add_action( 'wp_ajax_amari_get_builder_data', 'amari_ajax_get_builder_data' );

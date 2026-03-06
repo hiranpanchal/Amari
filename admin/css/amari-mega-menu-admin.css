@@ -1,0 +1,56 @@
+/**
+ * Amari Mega Menu — Admin Styles (nav-menus.php)
+ * @version 3.0.0
+ */
+
+/* Mega menu section appended to each menu item edit box */
+.amari-mega-fields {
+    margin-top: 12px;
+    border-top: 1px solid #ddd;
+    padding-top: 12px;
+}
+
+.amari-mega-fields .amari-mega-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.amari-mega-fields label[for^="amari_mega_enabled"] {
+    font-weight: 600;
+    color: #e94560;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.amari-mega-options {
+    background: #f9f9f9;
+    border: 1px solid #e2e6ea;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 8px;
+}
+
+.amari-mega-options label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.amari-mega-options select {
+    margin-left: 4px;
+    font-size: 0.8rem;
+}
+
+.amari-mega-options p {
+    font-size: 0.72rem;
+    color: #999;
+    line-height: 1.5;
+    margin-top: 10px;
+    margin-bottom: 0;
+}

@@ -14,7 +14,7 @@ if ( ! $post ) return;
     <!-- TOP TOOLBAR -->
     <div class="amari-builder-toolbar">
         <div class="amari-builder-toolbar-left">
-            <span class="amari-builder-logo">⚡ Amari Builder</span>
+            <span class="amari-builder-logo">Amari Builder</span>
             <span class="amari-builder-page-title"><?php echo esc_html($post->post_title ?: 'Untitled'); ?></span>
         </div>
 
@@ -47,9 +47,13 @@ if ( ! $post ) return;
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 Preview
             </button>
-            <button class="amari-tb-btn amari-save-btn" id="amari-save-btn">
+            <button class="amari-tb-btn amari-save-btn" id="amari-save-btn" title="Save draft (Ctrl+S)">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                Save
+                Save Draft
+            </button>
+            <button class="amari-tb-btn amari-publish-btn" id="amari-publish-btn" title="Save &amp; publish page">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Publish
             </button>
             <button class="amari-tb-btn amari-tb-btn-close" id="amari-builder-close">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
