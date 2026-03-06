@@ -317,29 +317,41 @@ class AmariSettings {
     }
 
     openMediaPicker(hiddenInput, preview, btn) {
-        if (typeof wp === 'undefined' || !wp.media) {
+        const applyImage = (url, alt) => {
+            hiddenInput.value = url;
+            preview.innerHTML = `<img src="${url}" alt="${alt || ''}" style="max-width:100%;max-height:160px;border-radius:6px;display:block;">`;
+            btn.textContent = 'Change Image';
+            // Dispatch change on the hidden input so bindControls picks it up
+            hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+            // Also dispatch an input event as a fallback
+            hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+        };
+
+        if (typeof wp === 'undefined' || typeof wp.media === 'undefined') {
+            // Fallback: plain URL prompt (e.g. frontend editing without wp.media)
             const url = prompt('Enter image URL:');
-            if (url) {
-                hiddenInput.value = url;
-                preview.innerHTML = `<img src="${url}" alt="">`;
-                btn.textContent = '🔄 Change Image';
-                hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
-            }
+            if (url) applyImage(url, '');
             return;
         }
-        const frame = wp.media({
-            title: 'Select Image',
-            button: { text: 'Use Image' },
-            multiple: false,
+
+        // Use (or reuse) a cached wp.media frame so it opens faster on repeat clicks
+        if (!this._mediaFrame) {
+            this._mediaFrame = wp.media({
+                title: 'Select Image',
+                button: { text: 'Use this image' },
+                multiple: false,
+                library: { type: 'image' },
+            });
+        }
+
+        // Remove any previous 'select' listener to avoid duplicates
+        this._mediaFrame.off('select');
+        this._mediaFrame.on('select', () => {
+            const attachment = this._mediaFrame.state().get('selection').first().toJSON();
+            applyImage(attachment.url, attachment.alt || attachment.title || '');
         });
-        frame.on('select', () => {
-            const attachment = frame.state().get('selection').first().toJSON();
-            hiddenInput.value = attachment.url;
-            preview.innerHTML = `<img src="${attachment.url}" alt="${attachment.alt || ''}">`;
-            btn.textContent = '🔄 Change Image';
-            hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
-        });
-        frame.open();
+
+        this._mediaFrame.open();
     }
 }
 

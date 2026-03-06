@@ -994,3 +994,29 @@
 
 /* Prevent WordPress from hiding things when builder loads */
 .amari-builder-overlay ~ #wpcontent { display: none; }
+
+/* ─── WORDPRESS MEDIA LIBRARY — force above builder overlay ── */
+/*
+ * The builder overlay uses z-index: 999999 and modals use 9999999.
+ * WordPress media library defaults to ~160000, so it appears behind
+ * the builder. These overrides push it well above both layers.
+ */
+
+.media-modal-backdrop,
+.wp-core-ui .media-modal-backdrop {
+    z-index: 10000000 !important;
+}
+
+.media-modal,
+.wp-core-ui .media-modal {
+    z-index: 10000001 !important;
+}
+
+/* Ensure media library button bar and notices also render on top */
+.media-frame,
+.upload-ui,
+.uploader-inline,
+.media-toolbar {
+    position: relative;
+    z-index: 10000001;
+}
