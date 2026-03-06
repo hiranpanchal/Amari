@@ -1,0 +1,352 @@
+/*
+Theme Name: Amari
+Theme URI: https://amari.build
+Author: Amari
+Author URI: https://amari.build
+Description: Amari is a powerful multi-discipline WordPress theme with a custom drag-and-drop page builder. Built for agencies, studios, and businesses who want complete creative control.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.7
+Requires PHP: 8.0
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: amari
+Tags: page-builder, drag-and-drop, business, portfolio, responsive, custom-colors, custom-logo, custom-menu, featured-images, full-width-template, threaded-comments
+*/
+
+/* ==========================================================================
+   AMARI THEME — GLOBAL RESET & BASE
+   ========================================================================== */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --amari-primary:       #1a1a2e;
+    --amari-secondary:     #16213e;
+    --amari-accent:        #0f3460;
+    --amari-highlight:     #e94560;
+    --amari-text:          #333333;
+    --amari-text-light:    #666666;
+    --amari-text-muted:    #999999;
+    --amari-bg:            #ffffff;
+    --amari-bg-alt:        #f8f9fa;
+    --amari-border:        #e5e7eb;
+    --amari-radius:        6px;
+    --amari-radius-lg:     12px;
+    --amari-shadow:        0 2px 16px rgba(0,0,0,0.08);
+    --amari-shadow-lg:     0 8px 40px rgba(0,0,0,0.12);
+    --amari-transition:    0.25s ease;
+    --amari-font-sans:     'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --amari-font-serif:    'Playfair Display', Georgia, serif;
+    --amari-font-mono:     'JetBrains Mono', 'Fira Code', monospace;
+    --amari-container:     1200px;
+    --amari-gap:           24px;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--amari-font-sans);
+    color: var(--amari-text);
+    background: var(--amari-bg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body.amari-builder-active {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    font-weight: 700;
+    color: var(--amari-primary);
+}
+
+h1 { font-size: clamp(2rem, 4vw, 3.5rem); }
+h2 { font-size: clamp(1.6rem, 3vw, 2.5rem); }
+h3 { font-size: clamp(1.3rem, 2.5vw, 2rem); }
+h4 { font-size: clamp(1.1rem, 2vw, 1.5rem); }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p { margin-bottom: 1rem; }
+p:last-child { margin-bottom: 0; }
+
+a {
+    color: var(--amari-highlight);
+    text-decoration: none;
+    transition: color var(--amari-transition);
+}
+a:hover { color: var(--amari-accent); }
+
+strong, b { font-weight: 700; }
+em, i { font-style: italic; }
+
+ul, ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+li { margin-bottom: 0.25rem; }
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================================================
+   LAYOUT
+   ========================================================================== */
+
+.amari-container {
+    width: 100%;
+    max-width: var(--amari-container);
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.amari-section {
+    position: relative;
+    width: 100%;
+}
+
+.amari-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 calc(-1 * var(--amari-gap) / 2);
+}
+
+.amari-col {
+    padding: 0 calc(var(--amari-gap) / 2);
+    width: 100%;
+}
+
+/* Column widths */
+.amari-col-1-1  { width: 100%; }
+.amari-col-1-2  { width: 50%; }
+.amari-col-1-3  { width: 33.3333%; }
+.amari-col-2-3  { width: 66.6667%; }
+.amari-col-1-4  { width: 25%; }
+.amari-col-3-4  { width: 75%; }
+.amari-col-1-5  { width: 20%; }
+.amari-col-2-5  { width: 40%; }
+.amari-col-3-5  { width: 60%; }
+
+@media (max-width: 768px) {
+    .amari-col-1-2,
+    .amari-col-1-3,
+    .amari-col-2-3,
+    .amari-col-1-4,
+    .amari-col-3-4,
+    .amari-col-1-5,
+    .amari-col-2-5,
+    .amari-col-3-5 {
+        width: 100%;
+    }
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.amari-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--amari-bg);
+    border-bottom: 1px solid var(--amari-border);
+    height: 70px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 1px 12px rgba(0,0,0,0.06);
+    transition: box-shadow var(--amari-transition);
+}
+
+.amari-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.amari-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--amari-primary);
+    letter-spacing: -0.5px;
+}
+.amari-logo span { color: var(--amari-highlight); }
+
+.amari-nav {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.amari-nav a {
+    color: var(--amari-text);
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+    transition: color var(--amari-transition);
+}
+.amari-nav a:hover { color: var(--amari-highlight); }
+
+.amari-nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+@media (max-width: 768px) {
+    .amari-nav { display: none; }
+    .amari-nav-toggle { display: block; }
+    .amari-nav.is-open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 70px; left: 0; right: 0;
+        background: var(--amari-bg);
+        border-bottom: 1px solid var(--amari-border);
+        padding: 16px 24px;
+        gap: 12px;
+        box-shadow: var(--amari-shadow);
+    }
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.amari-footer {
+    background: var(--amari-primary);
+    color: rgba(255,255,255,0.7);
+    padding: 48px 0 24px;
+    margin-top: auto;
+}
+
+.amari-footer a { color: rgba(255,255,255,0.7); }
+.amari-footer a:hover { color: #fff; }
+
+.amari-footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 32px;
+    padding-top: 20px;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* ==========================================================================
+   BUTTONS (global)
+   ========================================================================== */
+
+.amari-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border-radius: var(--amari-radius);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all var(--amari-transition);
+    text-decoration: none;
+    line-height: 1;
+}
+
+.amari-btn-primary {
+    background: var(--amari-highlight);
+    color: #fff;
+    border-color: var(--amari-highlight);
+}
+.amari-btn-primary:hover {
+    background: transparent;
+    color: var(--amari-highlight);
+}
+
+.amari-btn-secondary {
+    background: transparent;
+    color: var(--amari-primary);
+    border-color: var(--amari-primary);
+}
+.amari-btn-secondary:hover {
+    background: var(--amari-primary);
+    color: #fff;
+}
+
+.amari-btn-lg { padding: 16px 36px; font-size: 1rem; }
+.amari-btn-sm { padding: 8px 18px; font-size: 0.8rem; }
+
+/* ==========================================================================
+   UTILITIES
+   ========================================================================== */
+
+.amari-text-left   { text-align: left; }
+.amari-text-center { text-align: center; }
+.amari-text-right  { text-align: right; }
+
+.amari-mb-0  { margin-bottom: 0; }
+.amari-mb-1  { margin-bottom: 8px; }
+.amari-mb-2  { margin-bottom: 16px; }
+.amari-mb-3  { margin-bottom: 24px; }
+.amari-mb-4  { margin-bottom: 32px; }
+.amari-mb-5  { margin-bottom: 48px; }
+
+.amari-visually-hidden {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ==========================================================================
+   PAGE CONTENT
+   ========================================================================== */
+
+.amari-page-content {
+    min-height: 60vh;
+}
+
+.amari-no-builder {
+    padding: 60px 0;
+}
+
+/* Edit bar (shown when logged in) */
+.amari-edit-bar {
+    background: var(--amari-primary);
+    color: #fff;
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.85rem;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+}
+
+.amari-edit-bar a {
+    color: var(--amari-highlight);
+    font-weight: 600;
+}
