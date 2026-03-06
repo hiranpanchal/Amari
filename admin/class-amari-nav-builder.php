@@ -17,9 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class AmariNavBuilder {
 
-    private static ?AmariNavBuilder $instance = null;
+    /** @var self|null */
+    private static $instance = null;
 
-    public static function instance(): AmariNavBuilder {
+    public static function instance() {
         if ( ! self::$instance ) {
             self::$instance = new self();
         }

@@ -20,9 +20,10 @@ class AmariMegaMenu {
        Singleton
     ------------------------------------------------------------------ */
 
-    private static ?self $instance = null;
+    /** @var self|null */
+    private static $instance = null;
 
-    public static function instance(): self {
+    public static function instance() {
         if ( null === self::$instance ) {
             self::$instance = new self();
         }
@@ -246,13 +247,13 @@ class AmariMegaMenu {
 class Amari_Mega_Menu_Walker extends Walker_Nav_Menu {
 
     /* Track which top-level items are mega-menu-enabled */
-    private array $mega_items = [];
+    private $mega_items = [];
     /* Track if we are inside a mega dropdown */
-    private bool $in_mega = false;
+    private $in_mega = false;
     /* Accumulated child items grouped by heading */
-    private array $mega_children = [];
+    private $mega_children = [];
     /* Current top-level item being rendered */
-    private ?object $current_top = null;
+    private $current_top = null;
 
     /* ------------------------------------------------------------------
        start_lvl — opens a <ul class="sub-menu"> OR a mega dropdown

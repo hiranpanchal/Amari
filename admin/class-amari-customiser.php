@@ -19,9 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class AmariCustomiser {
 
-    private static ?AmariCustomiser $instance = null;
+    /** @var self|null */
+    private static $instance = null;
 
-    public static function instance(): AmariCustomiser {
+    public static function instance() {
         if ( ! self::$instance ) {
             self::$instance = new self();
         }

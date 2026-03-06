@@ -147,10 +147,17 @@ require_once AMARI_BUILDER_DIR . '/class-amari-templates.php';
 require_once AMARI_BUILDER_DIR . '/class-amari-frontend-editor.php';
 require_once AMARI_DIR         . '/admin/class-amari-global-styles.php';
 
-// V3 systems
-require_once AMARI_DIR . '/admin/class-amari-nav-builder.php';
-require_once AMARI_DIR . '/admin/class-amari-customiser.php';
-require_once AMARI_DIR . '/admin/class-amari-mega-menu.php';
+// V3 systems — guarded so a missing file never breaks the whole site
+foreach ( [
+    AMARI_DIR . '/admin/class-amari-nav-builder.php',
+    AMARI_DIR . '/admin/class-amari-customiser.php',
+    AMARI_DIR . '/admin/class-amari-mega-menu.php',
+] as $_amari_v3_file ) {
+    if ( file_exists( $_amari_v3_file ) ) {
+        require_once $_amari_v3_file;
+    }
+}
+unset( $_amari_v3_file );
 
 // Initialize all systems
 add_action( 'init', function() {
@@ -158,10 +165,10 @@ add_action( 'init', function() {
     AmariTemplates::instance();
     AmariFrontendEditor::instance();
     AmariGlobalStyles::instance();
-    // V3
-    AmariNavBuilder::instance();
-    AmariCustomiser::instance();
-    AmariMegaMenu::instance();
+    // V3 (only instantiate if the class was successfully loaded)
+    if ( class_exists( 'AmariNavBuilder' ) ) AmariNavBuilder::instance();
+    if ( class_exists( 'AmariCustomiser' ) ) AmariCustomiser::instance();
+    if ( class_exists( 'AmariMegaMenu' ) )   AmariMegaMenu::instance();
 });
 
 /* ============================================================
@@ -253,7 +260,7 @@ function amari_ajax_publish_page() {
     check_ajax_referer( 'amari_builder_nonce', 'nonce' );
 
     $post_id = intval( $_POST['post_id'] ?? 0 );
-    if ( ! $post_id || ! current_user_can( 'publish_post', $post_id ) ) {
+    if ( ! $post_id || ! current_user_can( 'edit_post', $post_id ) ) {
         wp_send_json_error( [ 'message' => 'Permission denied.' ] );
     }
 
