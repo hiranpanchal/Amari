@@ -10,7 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class AmariGlobalStyles {
 
-    private static ?AmariGlobalStyles $instance = null;
+    /** @var AmariGlobalStyles|null */
+    private static $instance = null;
     private const OPTION_KEY = 'amari_global_styles';
 
     public static function instance(): AmariGlobalStyles {
@@ -138,9 +139,9 @@ class AmariGlobalStyles {
         $heading_font = $s['font_heading'];
         $body_font    = $s['font_body'];
         $default_fonts = ['Inter', 'system', '-apple-system'];
-        $fonts_to_load = array_unique(array_filter([$heading_font, $body_font], fn($f) => !in_array($f, $default_fonts)));
+        $fonts_to_load = array_unique(array_filter([$heading_font, $body_font], function($f) use ($default_fonts) { return !in_array($f, $default_fonts); }));
         if ($fonts_to_load && !is_admin()) {
-            $families = implode('&family=', array_map(fn($f) => urlencode($f) . ':wght@300;400;500;600;700;800', $fonts_to_load));
+            $families = implode('&family=', array_map(function($f) { return urlencode($f) . ':wght@300;400;500;600;700;800'; }, $fonts_to_load));
             $url = "https://fonts.googleapis.com/css2?family={$families}&display=swap";
             echo '<link rel="stylesheet" href="' . esc_url($url) . '">';
         }

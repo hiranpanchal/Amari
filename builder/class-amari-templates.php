@@ -11,7 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class AmariTemplates {
 
-    private static ?AmariTemplates $instance = null;
+    /** @var AmariTemplates|null */
+    private static $instance = null;
 
     public static function instance(): AmariTemplates {
         if ( ! self::$instance ) self::$instance = new self();
@@ -62,7 +63,7 @@ class AmariTemplates {
     /* ── Template Definitions ────────────────────────────────── */
 
     private function get_all_templates(): array {
-        $uid = fn() => '_' . substr( md5( uniqid('', true) ), 0, 8 );
+        $uid = function() { return '_' . substr( md5( uniqid('', true) ), 0, 8 ); };
 
         return apply_filters( 'amari_templates', [
 

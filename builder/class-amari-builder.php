@@ -14,10 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class AmariBuilder {
 
     /** @var AmariBuilder|null */
-    private static ?AmariBuilder $instance = null;
+    private static $instance = null;
 
     /** @var AmariElement[] */
-    private array $elements = [];
+    private $elements = [];
 
     /* --------------------------------------------------------
        Singleton

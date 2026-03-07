@@ -15,7 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class AmariFrontendEditor {
 
-    private static ?AmariFrontendEditor $instance = null;
+    /** @var AmariFrontendEditor|null */
+    private static $instance = null;
 
     public static function instance(): AmariFrontendEditor {
         if ( ! self::$instance ) self::$instance = new self();

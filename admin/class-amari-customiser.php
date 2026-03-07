@@ -141,7 +141,7 @@ class AmariCustomiser {
 
         // Enqueue Google Fonts if needed
         $fonts = array_unique( array_filter( [ $s['font_heading'], $s['font_body'] ] ) );
-        $font_families = array_map( fn($f) => urlencode( $f ) . ':wght@300;400;500;600;700;800', $fonts );
+        $font_families = array_map( function($f) { return urlencode( $f ) . ':wght@300;400;500;600;700;800'; }, $fonts );
         if ( ! is_admin() && $font_families ) {
             $url = 'https://fonts.googleapis.com/css2?family=' . implode( '&family=', $font_families ) . '&display=swap';
             printf( '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="%s">', esc_url($url) );

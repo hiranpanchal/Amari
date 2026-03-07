@@ -6,7 +6,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'AMARI_VERSION',   '2.0.0' );
+define( 'AMARI_VERSION',   '3.0.0' );
 define( 'AMARI_DIR',       get_template_directory() );
 define( 'AMARI_URI',       get_template_directory_uri() );
 define( 'AMARI_BUILDER_DIR', AMARI_DIR . '/builder' );
@@ -127,6 +127,7 @@ function amari_admin_enqueue( $hook ) {
         'postId'    => $post ? $post->ID : 0,
         'themeUri'  => AMARI_URI,
         'elements'  => amari_get_registered_elements_config(),
+        'templates' => class_exists( 'AmariTemplates' ) ? AmariTemplates::instance()->get_template_index() : [],
         'i18n'      => [
             'confirm_delete'   => __( 'Delete this element?', 'amari' ),
             'confirm_section'  => __( 'Delete this section and all its contents?', 'amari' ),
@@ -425,4 +426,16 @@ function amari_admin_head_styles() {
     #amari-launch-builder { background: #e94560 !important; border-color: #e94560 !important; }
     </style>
     <?php
+}
+
+/* ============================================================
+   12. PERMALINK / REWRITE FLUSH ON THEME ACTIVATION
+   ============================================================ */
+
+add_action( 'after_switch_theme', 'amari_flush_rewrite_rules' );
+function amari_flush_rewrite_rules() {
+    // Register custom post types first so their rewrite rules are available
+    amari_register_post_types();
+    // Then flush — this sets up pretty permalinks immediately after theme activation
+    flush_rewrite_rules();
 }
